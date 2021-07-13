@@ -60,11 +60,12 @@ Connect-Rubrik $RubrikServer -Credential $RubrikCred
 $mv = Get-RubrikManagedVolume -Name $MVName
 $mv | Start-RubrikManagedVolumeSnapshot
 
-$AzCopyFullPath = ".\AzCopy.exe"
+$AzCopyFullPath = ".\azcopy.exe"
 if ($AzCopyPath) {
     $AzCopyFullPath = Join-Path -Path $AzCopyPath -ChildPath "AzCopy.exe"
 }
 
-Invoke-Expression $AzCopyFullPath cp "$SourceBlobsContainer" "$TargetMV" --recursive
+$Command = "$AzCopyFullPath copy '$SourceBlobsContainer' '$TargetMV' --recursive"
+Invoke-Expression $Command
 
 $mv | Stop-RubrikManagedVolumeSnapshot
